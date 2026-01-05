@@ -2,4 +2,4 @@ After getting a 16-col stack-blit to work in https://github.com/mtg101/StackPort
 
 So now I'm thinking: how far can I go? That demo had all sorts of column blanking and attr blitting to deal with. What if I just focus on monochromatic pixels... how many columns can I blit every frame?
 
-To make life extr easy, I'll just loop-scroll an existing image on the main screen. 
+To make life extra easy, I'll just loop-scroll an existing image on the main screen. 
