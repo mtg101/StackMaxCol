@@ -80,6 +80,10 @@ INTERRUPT:
 	EI                               ; Enable interrupts
 	RET                              ; INTERRUPT
 
+; screen
+	ORG			$4000
+	INCBIN 		"futari.scr"
+
 ; Deployment: Snapshot
-   SAVESNA 	"smaxc.sna", START
+	SAVESNA 	"smaxc.sna", START
    
