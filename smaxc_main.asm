@@ -3,6 +3,7 @@
 	ORG 	$8000					; the uncontended 32KiB
 	
 	INCLUDE "smaxc_defs.asm"
+	INCLUDE "smaxc_top_border.asm"
 	
 START:
 	CALL	INITIALISE_INTERRUPT	; IM2 with ROM trick
@@ -11,7 +12,7 @@ START:
 SP_MAIN:
 	HALT							; wait for vblank
 	CALL	VBLANK_PERIOD_WORK		; 8 scanline * 224 = 1952 t-states (minus some for alignment timing)
-;	CALL	TOP_BORDER_RENDER		; timining-critical flipping of top border colours
+	CALL	TOP_BORDER_RENDER		; timining-critical flipping of top border colours
 	CALL 	FRAME_ENGINE
 	JP		SP_MAIN
 
