@@ -10,7 +10,7 @@ STACK_RENDER:														; 17 T (call)
 	LD 			(STACK_POINTER_BACKUP), SP							; 20 T
 
 STACK_RENDER_PIXELS:
-	; 192 rows plus extra buffer loop= 192 @ 204 T each											; 39,372 T
+	; 192 rows plus extra buffer loop = 193 @ 262 T each											; 39,372 T
 	Stack_Row_Pixel	0	,	192
 	Stack_Row_Pixel	1	,	0
 	Stack_Row_Pixel	2	,	1
@@ -213,8 +213,8 @@ STACK_RENDER_BUFFER_DONE:
 	; none for now
 	RET								; STACK_RENDER					; 10 T
 		; overhead: 17 + 20 + 20 + 10 = 67 T
-		; pixel rows 193 * 204 = 39,372 T
-		; total = 39,439 T
+		; pixel rows 193 * 262 = 50,566 T
+		; total = 50,633 T
 
 
 
@@ -225,8 +225,7 @@ STACK_RENDER_BUFFER_DONE:
 	; and timing 8 vblank & 56 top border away
 	; then have all 192 main screen plus 56 bottom border before HALT
 	; = 248 scanlines
-	; = 55,552 t-states
-	; so double the floating bus... 
+	; = 50,552 t-states
 
 
 STACK_POINTER_BACKUP:
