@@ -9,8 +9,13 @@ STACK_RENDER:														; 17 T (call)
 	; preserve SP
 	LD 			(STACK_POINTER_BACKUP), SP							; 20 T
 
+; hack border red to see timings
+	LD 		A, 2					
+	OUT		($FE), A		
+
+
 STACK_RENDER_PIXELS:
-	; 192 rows plus extra buffer loop = 193 @ 262 T each											; 39,372 T
+	; 192 rows plus extra buffer loop = 193 @ 262 T each
 	Stack_Row_Pixel	0	,	192
 	Stack_Row_Pixel	1	,	0
 	Stack_Row_Pixel	2	,	1
@@ -204,6 +209,11 @@ STACK_RENDER_PIXELS:
 	Stack_Row_Pixel	190	,	189
 	Stack_Row_Pixel	191	,	190
 	Stack_Row_Pixel	192	,	191
+
+; hack border ywllow to see timings
+	LD 		A, 6					
+	OUT		($FE), A		
+
 
 STACK_RENDER_BUFFER_DONE:
 	; restore SP

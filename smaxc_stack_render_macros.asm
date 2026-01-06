@@ -14,7 +14,7 @@
 
 		; extra IX/IY
 		POP 		IX 													; 14 T
-		POP			IY 													; 14 T 
+;		POP			IY 													; 14 T 
 																			; = 28 T
 
 		; flip to shadow registers
@@ -33,8 +33,6 @@
 		LD 			SP, SCREEN_END_tar_num								; 10 T
 																			; = 10 T
 
-																			; = 30 T
-
 		; push from shadow registers to screen
 		PUSH 		HL 													; 11 T
 		PUSH 		DE 													; 11 T
@@ -48,8 +46,9 @@
 																			; = 8 T
 
 		; extra IX/IY
-		PUSH 		IY													; 15 T
+;		PUSH 		IY													; 15 T
 		PUSH 		IX													; 15 T
+																			; = 30 T
 
 		; push from registers to screen
 		PUSH 		HL 													; 11 T
