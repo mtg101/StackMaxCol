@@ -1,6 +1,7 @@
 
 
-	MACRO 		Stack_Row_Pixel	   src_num, tar_num							; total 262 T
+	MACRO 		Stack_Row_Pixel	   src_num, tar_num							; total 262 T for 20
+																			; 233 T for 18
 		; start of sourse row
 		LD 			SP, SCREEN_BASE_src_num								; 10 T
 																			; = 10 T

@@ -12,7 +12,8 @@ START:
 
 SP_MAIN:
 	HALT							; wait for vblank
-	CALL	VBLANK_PERIOD_WORK		; 8 scanline * 224 = 1952 t-states (minus some for alignment timing)
+	JP		VBLANK_PERIOD_WORK		; 8 scanline * 224 = 1,952 t-states (minus some for alignment timing)
+VBLANK_PERIOD_WORK_OVER:
 	CALL	TOP_BORDER_RENDER		; timining-critical flipping of top border colours
 	CALL 	STACK_RENDER
 	JP		SP_MAIN
@@ -27,31 +28,111 @@ INITIAL_SETUP:
 FRAME_COUNT:
 	DEFB 	0
 
-; 8 scanline * 224 = 1,752 t-states (minus some for alignment, push/pop, calls, etc...)
+; 8 scanline * 224 = 1,752 t-states (minus some for alignment, etc)
 ; we use it to flicker a window's colour based on pre-calculated stuff 
-VBLANK_PERIOD_WORK:					
-	PUSH AF							
-	PUSH BC							
-	PUSH DE							
-	PUSH HL							
 
-	NOP
-	NOP
+VBLANK_PERIOD_WORK:					; 10 T (JP in)
 
-	LD		B, 118
+; pre-pop buffer
+
+	LD 			(STACK_POINTER_BACKUP), SP	; 20 T
+	Stack_Row_Pixel	0	,	192				; 233 T (18 col)
+					; 262 T for 20col	
+
+	LD 			SP, (STACK_POINTER_BACKUP)	; 20 T
+												; = 273 T  (18 col)
+					; = 302 T (20 col)
+
+
+; pre-pop registers
+
+
+
+; pre-pop SP   (after we steop being in a called routine!)
+
+
+
+; filler
+	PUSH AF							; 11 T
+	PUSH BC							; 11 T							
+	PUSH DE							; 11 T
+	PUSH HL							; 11 T
+										; = 44 T
+
+	NOP								; 4 T
+	NOP								; 4 T
+										; = 8 T
+
+	LD		B, 97					; 7 T
+										; = 7 T
 VBLANK_LOOP:						
-	DJNZ	VBLANK_LOOP				
+	DJNZ	VBLANK_LOOP			; 13 T per loop
+								; +8 T last time
+
+								; 96 * 13 = 1,248 T
+
+									; last loop
+										; 8 T 
 									
-	; fiddling...
-	;.1 LD	A, 7					
-	;.3 NOP	
+	POP HL							; 10 T
+	POP DE							; 10 T
+	POP BC							; 10 T
+	POP AF							; 10 T
+										; = 40T
 
-	POP HL							
-	POP DE							
-	POP BC							
-	POP AF							
+	; fiddling
+	LD		B, 97					; 7 T ()
 
-	RET								; VBLANK_PERIOD_WORK
+
+	JP	VBLANK_PERIOD_WORK_OVER		; 10 T (ret)
+
+	; buffer: 273 T
+	; reg: -
+	; sp: -
+	; before loop: 69 T
+	; loop: 1,248 T
+	; after: 65 T
+	; = 1,655 T
+
+
+; original VBLANK_PERIOD_WORK
+; VBLANK_PERIOD_WORK:					; 17 T (call)
+; 	PUSH AF							; 11 T
+; 	PUSH BC							; 11 T							
+; 	PUSH DE							; 11 T
+; 	PUSH HL							; 11 T
+; 										; = 44 T
+
+; 	NOP								; 4 T
+; 	NOP								; 4 T
+; 										; = 8 T
+
+; 	LD		B, 118					; 7 T
+; 										; = 7 T
+; VBLANK_LOOP:						
+; 	DJNZ	VBLANK_LOOP			; 13 T per loop
+; 								; +8 T last time
+
+; 								; 117 * 13 = 1,521 T
+; 									; + 8 = 1,529 T
+									
+; 	POP HL							; 10 T
+; 	POP DE							; 10 T
+; 	POP BC							; 10 T
+; 	POP AF							; 10 T
+; 										; = 40T
+
+; 	RET	; VBLANK_PERIOD_WORK		; 10 T (ret)
+
+; 	; before loop: 76 T
+; 	; loop: 1,529 T
+; 	; after: 50 T
+; 	; = 1,655 T
+
+
+
+
+
 
 ; set up IM2 - so we don't wate time scanning keyboard and so on
 ; use ROM trick for interrupt table

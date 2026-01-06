@@ -30,7 +30,8 @@ TOP_BORDER_RENDER_LOOP:
 
 	DJNZ    TOP_BORDER_RENDER_LOOP
 
-	LD  	A, 0		; black border
+;	LD  	A, 0		; back to black border
+	LD 		A, 4		; green for timings debug...
 	OUT		($FE), A
 
 	RET								; TOP_BORDER_RENDER

@@ -15,8 +15,8 @@ STACK_RENDER:														; 17 T (call)
 
 
 STACK_RENDER_PIXELS:
-	; 192 rows plus extra buffer loop = 193 @ 262 T each
-	Stack_Row_Pixel	0	,	192
+	; 192 rows = 192 @ 262 T each
+;	Stack_Row_Pixel	0	,	192  (done during vblank)
 	Stack_Row_Pixel	1	,	0
 	Stack_Row_Pixel	2	,	1
 	Stack_Row_Pixel	3	,	2
@@ -223,9 +223,12 @@ STACK_RENDER_BUFFER_DONE:
 	; none for now
 	RET								; STACK_RENDER					; 10 T
 		; overhead: 17 + 20 + 20 + 10 = 67 T
-		; pixel rows 193 * 262 = 50,566 T
-		; total = 50,633 T
+		; pixel rows 192 * 262 = 50,304 T
+		; total = 50,371 T
 
+		; 18 cols
+		; 192 * 233 = 44,969 T
+		; +67 overhead = 44,803 T
 
 
 
