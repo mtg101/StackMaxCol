@@ -34,7 +34,7 @@ TOP_BORDER_RENDER_LOOP:
 	LD 		A, 4		; green for timings debug...
 	OUT		($FE), A
 
-	RET								; TOP_BORDER_RENDER
+	JP		TOP_BORDER_RENDER_OVER
 
 ; 56 x 11
 TOP_BORDER_BUFFER:

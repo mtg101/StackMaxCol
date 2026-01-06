@@ -2,7 +2,7 @@
 	INCLUDE 	"smaxc_stack_render_macros.asm"
 
 
-STACK_RENDER:														; 17 T (call)
+STACK_RENDER:														; 10 T (JP in)
 	; push any registers we need to preserve...
 	; none for now
 
@@ -221,14 +221,14 @@ STACK_RENDER_BUFFER_DONE:
 
 	; pop any registers we need to restore...
 	; none for now
-	RET								; STACK_RENDER					; 10 T
-		; overhead: 17 + 20 + 20 + 10 = 67 T
+	JP			STACK_RENDER_OVER									; 10 T
+		; overhead: 17 + 20 + 20 + 10 = 60 T
 		; pixel rows 192 * 262 = 50,304 T
-		; total = 50,371 T
+		; total = 50,364 T
 
 		; 18 cols
-		; 192 * 233 = 44,969 T
-		; +67 overhead = 44,803 T
+		; 192 * 233 = 44,962 T
+		; +67 overhead = 44,796 T
 
 
 

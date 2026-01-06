@@ -14,8 +14,10 @@ SP_MAIN:
 	HALT							; wait for vblank
 	JP		VBLANK_PERIOD_WORK		; 8 scanline * 224 = 1,952 t-states (minus some for alignment timing)
 VBLANK_PERIOD_WORK_OVER:
-	CALL	TOP_BORDER_RENDER		; timining-critical flipping of top border colours
-	CALL 	STACK_RENDER
+	JP		TOP_BORDER_RENDER		; timining-critical flipping of top border colours
+TOP_BORDER_RENDER_OVER:
+	JP 		STACK_RENDER
+STACK_RENDER_OVER:
 	JP		SP_MAIN
 
 INITIAL_SETUP:
@@ -81,7 +83,8 @@ VBLANK_LOOP:
 										; = 40T
 
 	; fiddling
-	LD		B, 97					; 7 T ()
+	LD		B, 97					; 7 T
+	NOP								; 4 T
 
 
 	JP	VBLANK_PERIOD_WORK_OVER		; 10 T (ret)
@@ -91,8 +94,8 @@ VBLANK_LOOP:
 	; sp: -
 	; before loop: 69 T
 	; loop: 1,248 T
-	; after: 65 T
-	; = 1,655 T
+	; after: 69 T
+	; = 1,659 T
 
 
 ; original VBLANK_PERIOD_WORK
