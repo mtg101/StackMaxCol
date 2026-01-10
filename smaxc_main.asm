@@ -42,47 +42,10 @@ VBLANK_PERIOD_WORK:					; 10 T (JP in)
 	Stack_Row_Pixel	0	,	192				; 233 T (18 col)
 					; 262 T for 20col	
 
-
-; pre-pop registers
-		; start of source row
-		LD 			SP, SCREEN_BASE_1									; 10 T
-																			; = 10 T
-
-		; pop from source to registers
-		POP 		AF 													; 10 T
-		POP 		BC 													; 10 T
-		POP 		DE 													; 10 T
-		POP 		HL													; 10 T
-																			; = 40 T
-
-		; extra IX/IY
-;		POP 		IX 													; 14 T
-		POP			IY 													; 14 T 
-																			; = 28 T
-
-		; flip to shadow registers
-		EXX 															; 4 T
-		EX AF															; 4 T
-																			; = 8 T
-
-		; pop from source to shadow registers
-		POP 		AF 													; 10 T
-		POP 		BC 													; 10 T
-		POP 		DE 													; 10 T
-		POP 		HL													; 10 T
-																			; = 40 T
-
-																				; = 126 T
-
-; pre-pop SP   (after we steop being in a called routine!)
-		; end of target row
-;		LD 			SP, SCREEN_END_tar_num								; 10 T
-
+; restore SP
 	LD 			SP, (STACK_POINTER_BACKUP)	; 20 T
 												; = 273 T  (18 col)
 					; = 302 T (20 col)
-
-
 
 ; filler
 	PUSH AF							; 11 T
@@ -91,17 +54,13 @@ VBLANK_PERIOD_WORK:					; 10 T (JP in)
 	PUSH HL							; 11 T
 										; = 44 T
 
-	NOP								; 4 T
-	NOP								; 4 T
-										; = 8 T
-
-	LD		B, 86					; 7 T
+	LD		B, 96					; 7 T
 										; = 7 T
 VBLANK_LOOP:						
 	DJNZ	VBLANK_LOOP			; 13 T per loop
 								; +8 T last time
 
-								; 86 * 13 = 1,248 T
+								;  * 13 = ???? T
 
 									; last loop
 										; 8 T 
@@ -113,7 +72,7 @@ VBLANK_LOOP:
 										; = 40T
 
 	; fiddling
-	.3 NOP								; 4 T
+	.7 NOP								; 4 T
 
 
 	JP	VBLANK_PERIOD_WORK_OVER		; 10 T (ret)
