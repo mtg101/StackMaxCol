@@ -3,52 +3,46 @@
 
 
 STACK_RENDER:														; 10 T (JP in)
-	; push any registers we need to preserve...
-	; none for now
-
-	; preserve SP
-	LD 			(STACK_POINTER_BACKUP), SP							; 20 T
-
-; hack border red to see timings
-	LD 		A, 2					
+	; border
+	PUSH 	AF
+	LD 		A, 3					
 	OUT		($FE), A		
+	POP 	AF
 
 
 STACK_RENDER_PIXELS:
-	; 192 rows = 192 @ 262 T each
-;	Stack_Row_Pixel	0	,	192  (done during vblank)
+; 	; 192 rows = 192 @ 262 T each
+; ;	Stack_Row_Pixel	0	,	192  (done during vblank)
 
 
-;	Stack_Row_Pixel	1	,	0 ;-- no no we're preloaded!
+; ;	Stack_Row_Pixel	1	,	0 ;-- no no we're preloaded!
 
-		; end of target row
-		LD 			SP, SCREEN_END_0									; 10 T
-																			; = 10 T
+; 		; push from shadow registers to screen
+; 		PUSH 		HL 													; 11 T
+; 		PUSH 		DE 													; 11 T
+; 		PUSH 		BC 													; 11 T
+; 		PUSH 		AF 													; 11 T
+; 																			; = 44 T
 
-		; push from shadow registers to screen
-		PUSH 		HL 													; 11 T
-		PUSH 		DE 													; 11 T
-		PUSH 		BC 													; 11 T
-		PUSH 		AF 													; 11 T
-																			; = 44 T
+; 		; flip back to regular registers
+; 		EXX 															; 4 T
+; 		EX AF															; 4 T
+; 																			; = 8 T
 
-		; flip back to regular registers
-		EXX 															; 4 T
-		EX AF															; 4 T
-																			; = 8 T
+; 		; extra IX/IY
+; 		PUSH 		IY													; 15 T
+; ;		PUSH 		IX													; 15 T
+; 																			; = 30 T
 
-		; extra IX/IY
-		PUSH 		IY													; 15 T
-;		PUSH 		IX													; 15 T
-																			; = 30 T
-
-		; push from registers to screen
-		PUSH 		HL 													; 11 T
-		PUSH 		DE 													; 11 T
-		PUSH 		BC 													; 11 T
-		PUSH 		AF 													; 11 T
+; 		; push from registers to screen
+; 		PUSH 		HL 													; 11 T
+; 		PUSH 		DE 													; 11 T
+; 		PUSH 		BC 													; 11 T
+; 		PUSH 		AF 													; 11 T
 
 
+	Stack_Row_Pixel	0	,	192
+	Stack_Row_Pixel	1	,	0
 	Stack_Row_Pixel	2	,	1
 	Stack_Row_Pixel	3	,	2
 	Stack_Row_Pixel	4	,	3
@@ -194,65 +188,62 @@ STACK_RENDER_PIXELS:
 	Stack_Row_Pixel	144	,	143
 	Stack_Row_Pixel	145	,	144
 	Stack_Row_Pixel	146	,	145
-	Stack_Row_Pixel	147	,	146
-	Stack_Row_Pixel	148	,	147
-	Stack_Row_Pixel	149	,	148
-	Stack_Row_Pixel	150	,	149
-	Stack_Row_Pixel	151	,	150
-	Stack_Row_Pixel	152	,	151
-	Stack_Row_Pixel	153	,	152
-	Stack_Row_Pixel	154	,	153
-	Stack_Row_Pixel	155	,	154
-	Stack_Row_Pixel	156	,	155
-	Stack_Row_Pixel	157	,	156
-	Stack_Row_Pixel	158	,	157
-	Stack_Row_Pixel	159	,	158
-	Stack_Row_Pixel	160	,	159
-	Stack_Row_Pixel	161	,	160
-	Stack_Row_Pixel	162	,	161
-	Stack_Row_Pixel	163	,	162
-	Stack_Row_Pixel	164	,	163
-	Stack_Row_Pixel	165	,	164
-	Stack_Row_Pixel	166	,	165
-	Stack_Row_Pixel	167	,	166
-	Stack_Row_Pixel	168	,	167
-	Stack_Row_Pixel	169	,	168
-	Stack_Row_Pixel	170	,	169
-	Stack_Row_Pixel	171	,	170
-	Stack_Row_Pixel	172	,	171
-	Stack_Row_Pixel	173	,	172
-	Stack_Row_Pixel	174	,	173
-	Stack_Row_Pixel	175	,	174
-	Stack_Row_Pixel	176	,	175
-	Stack_Row_Pixel	177	,	176
-	Stack_Row_Pixel	178	,	177
-	Stack_Row_Pixel	179	,	178
-	Stack_Row_Pixel	180	,	179
-	Stack_Row_Pixel	181	,	180
-	Stack_Row_Pixel	182	,	181
-	Stack_Row_Pixel	183	,	182
-	Stack_Row_Pixel	184	,	183
-	Stack_Row_Pixel	185	,	184
-	Stack_Row_Pixel	186	,	185
-	Stack_Row_Pixel	187	,	186
-	Stack_Row_Pixel	188	,	187
-	Stack_Row_Pixel	189	,	188
-	Stack_Row_Pixel	190	,	189
-	Stack_Row_Pixel	191	,	190
-	Stack_Row_Pixel	192	,	191
+; doing in vblank
+	; Stack_Row_Pixel	147	,	146
+	; Stack_Row_Pixel	148	,	147
+	; Stack_Row_Pixel	149	,	148
+	; Stack_Row_Pixel	150	,	149
+	; Stack_Row_Pixel	151	,	150
+	; Stack_Row_Pixel	152	,	151
+	; Stack_Row_Pixel	153	,	152
+	; Stack_Row_Pixel	154	,	153
+	; Stack_Row_Pixel	155	,	154
+	; Stack_Row_Pixel	156	,	155
+	; Stack_Row_Pixel	157	,	156
+	; Stack_Row_Pixel	158	,	157
+	; Stack_Row_Pixel	159	,	158
+	; Stack_Row_Pixel	160	,	159
+	; Stack_Row_Pixel	161	,	160
+	; Stack_Row_Pixel	162	,	161
+	; Stack_Row_Pixel	163	,	162
+	; Stack_Row_Pixel	164	,	163
+	; Stack_Row_Pixel	165	,	164
+	; Stack_Row_Pixel	166	,	165
+	; Stack_Row_Pixel	167	,	166
+	; Stack_Row_Pixel	168	,	167
+	; Stack_Row_Pixel	169	,	168
+	; Stack_Row_Pixel	170	,	169
+	; Stack_Row_Pixel	171	,	170
+	; Stack_Row_Pixel	172	,	171
+	; Stack_Row_Pixel	173	,	172
+	; Stack_Row_Pixel	174	,	173
+	; Stack_Row_Pixel	175	,	174
+	; Stack_Row_Pixel	176	,	175
+	; Stack_Row_Pixel	177	,	176
+	; Stack_Row_Pixel	178	,	177
+	; Stack_Row_Pixel	179	,	178
+	; Stack_Row_Pixel	180	,	179
+	; Stack_Row_Pixel	181	,	180
+	; Stack_Row_Pixel	182	,	181
+	; Stack_Row_Pixel	183	,	182
+	; Stack_Row_Pixel	184	,	183
+	; Stack_Row_Pixel	185	,	184
+	; Stack_Row_Pixel	186	,	185
+	; Stack_Row_Pixel	187	,	186
+	; Stack_Row_Pixel	188	,	187
+	; Stack_Row_Pixel	189	,	188
+	; Stack_Row_Pixel	190	,	189
+	; Stack_Row_Pixel	191	,	190
+	; Stack_Row_Pixel	192	,	191
 
-; hack border ywllow to see timings
-	LD 		A, 6					
+	; border
+	PUSH 	AF
+	LD 		A, 4
 	OUT		($FE), A		
+	POP 	AF
 
 
-STACK_RENDER_BUFFER_DONE:
-	; restore SP
-	LD 			SP, (STACK_POINTER_BACKUP)							; 20 T
-
-	; pop any registers we need to restore...
-	; none for now
-	JP			STACK_RENDER_OVER									; 10 T
+	JP			SP_MAIN
 		; overhead: 17 + 20 + 20 + 10 = 60 T
 		; pixel rows 192 * 262 = 50,304 T
 		; total = 50,364 T
@@ -271,7 +262,4 @@ STACK_RENDER_BUFFER_DONE:
 	; = 248 scanlines
 	; = 50,552 t-states
 
-
-STACK_POINTER_BACKUP:
-	DEFW 		0
 
