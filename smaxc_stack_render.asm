@@ -17,7 +17,38 @@ STACK_RENDER:														; 10 T (JP in)
 STACK_RENDER_PIXELS:
 	; 192 rows = 192 @ 262 T each
 ;	Stack_Row_Pixel	0	,	192  (done during vblank)
-	Stack_Row_Pixel	1	,	0
+
+
+;	Stack_Row_Pixel	1	,	0 ;-- no no we're preloaded!
+
+		; end of target row
+		LD 			SP, SCREEN_END_0									; 10 T
+																			; = 10 T
+
+		; push from shadow registers to screen
+		PUSH 		HL 													; 11 T
+		PUSH 		DE 													; 11 T
+		PUSH 		BC 													; 11 T
+		PUSH 		AF 													; 11 T
+																			; = 44 T
+
+		; flip back to regular registers
+		EXX 															; 4 T
+		EX AF															; 4 T
+																			; = 8 T
+
+		; extra IX/IY
+		PUSH 		IY													; 15 T
+;		PUSH 		IX													; 15 T
+																			; = 30 T
+
+		; push from registers to screen
+		PUSH 		HL 													; 11 T
+		PUSH 		DE 													; 11 T
+		PUSH 		BC 													; 11 T
+		PUSH 		AF 													; 11 T
+
+
 	Stack_Row_Pixel	2	,	1
 	Stack_Row_Pixel	3	,	2
 	Stack_Row_Pixel	4	,	3

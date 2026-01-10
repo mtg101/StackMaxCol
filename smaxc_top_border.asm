@@ -1,6 +1,12 @@
 ; timining-critical flipping of top border colours
 ; 224 t-states per row
 TOP_BORDER_RENDER:		
+
+	; can't trash registers...
+	PUSH 	AF 
+	PUSH 	BC
+	PUSH	HL
+
 	LD		C, $FE
 	LD 		HL, TOP_BORDER_BUFFER
 
@@ -33,6 +39,11 @@ TOP_BORDER_RENDER_LOOP:
 ;	LD  	A, 0		; back to black border
 	LD 		A, 4		; green for timings debug...
 	OUT		($FE), A
+
+	; can't trash reg
+	POP 	HL
+	POP 	BC 
+	POP 	AF 
 
 	JP		TOP_BORDER_RENDER_OVER
 

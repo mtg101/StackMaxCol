@@ -14,8 +14,8 @@
 																			; = 40 T
 
 		; extra IX/IY
-		POP 		IX 													; 14 T
-;		POP			IY 													; 14 T 
+;		POP 		IX 													; 14 T
+		POP			IY 													; 14 T 
 																			; = 28 T
 
 		; flip to shadow registers
@@ -47,8 +47,8 @@
 																			; = 8 T
 
 		; extra IX/IY
-;		PUSH 		IY													; 15 T
-		PUSH 		IX													; 15 T
+		PUSH 		IY													; 15 T
+;		PUSH 		IX													; 15 T
 																			; = 30 T
 
 		; push from registers to screen
