@@ -43,13 +43,13 @@ FILL_1:
 	DJNZ	FILL_1
 FILL_2:
 	DJNZ	FILL_2
-	LD 		B, 100
+	LD 		B, 179
 FILL_3:
 	DJNZ	FILL_3
 
 
 	; fiddling
-	.4 NOP								; 4 T
+	.10 NOP								; 4 T
 
 
 
