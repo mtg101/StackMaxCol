@@ -2,6 +2,7 @@
 ; 224 t-states per row
 TOP_BORDER_RENDER:		
 	; can't trash registers...
+	LD 		SP, PRIVATE_STACK
 	PUSH 	AF 
 	PUSH 	BC
 	PUSH	HL

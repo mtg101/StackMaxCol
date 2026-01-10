@@ -28,6 +28,7 @@ SP_MAIN:
 	HALT							; wait for vblank
 
 	; border
+	LD 		SP, PRIVATE_STACK
 	PUSH 	AF
 	LD 		A, 1					
 	OUT		($FE), A		
@@ -35,56 +36,30 @@ SP_MAIN:
 
 	; vblank work...
 
+	LD		B, 255
+FILL_0:
+	DJNZ	FILL_0
+FILL_1:
+	DJNZ	FILL_1
+FILL_2:
+	DJNZ	FILL_2
+	LD 		B, 100
+FILL_3:
+	DJNZ	FILL_3
+
+
+	; fiddling
+	.4 NOP								; 4 T
+
+
+
+
+
 ; 8 scanline * 224 = 1,752 t-states (minus some for alignment, etc)
 ; we use it to flicker a window's colour based on pre-calculated stuff 
 
-; last few rows...
-	Stack_Row_Pixel	147	,	146
-	Stack_Row_Pixel	148	,	147
-	Stack_Row_Pixel	149	,	148
-	Stack_Row_Pixel	150	,	149
-	Stack_Row_Pixel	151	,	150
-	Stack_Row_Pixel	152	,	151
-	Stack_Row_Pixel	153	,	152
-	Stack_Row_Pixel	154	,	153
-	Stack_Row_Pixel	155	,	154
-	Stack_Row_Pixel	156	,	155
-	Stack_Row_Pixel	157	,	156
-	Stack_Row_Pixel	158	,	157
-	Stack_Row_Pixel	159	,	158
-	Stack_Row_Pixel	160	,	159
-	Stack_Row_Pixel	161	,	160
-	Stack_Row_Pixel	162	,	161
-	Stack_Row_Pixel	163	,	162
-	Stack_Row_Pixel	164	,	163
-	Stack_Row_Pixel	165	,	164
-	Stack_Row_Pixel	166	,	165
-	Stack_Row_Pixel	167	,	166
-	Stack_Row_Pixel	168	,	167
-	Stack_Row_Pixel	169	,	168
-	Stack_Row_Pixel	170	,	169
-	Stack_Row_Pixel	171	,	170
-	Stack_Row_Pixel	172	,	171
-	Stack_Row_Pixel	173	,	172
-	Stack_Row_Pixel	174	,	173
-	Stack_Row_Pixel	175	,	174
-	Stack_Row_Pixel	176	,	175
-	Stack_Row_Pixel	177	,	176
-	Stack_Row_Pixel	178	,	177
-	Stack_Row_Pixel	179	,	178
-	Stack_Row_Pixel	180	,	179
-	Stack_Row_Pixel	181	,	180
-	Stack_Row_Pixel	182	,	181
-	Stack_Row_Pixel	183	,	182
-	Stack_Row_Pixel	184	,	183
-	Stack_Row_Pixel	185	,	184
-	Stack_Row_Pixel	186	,	185
-	Stack_Row_Pixel	187	,	186
-	Stack_Row_Pixel	188	,	187
-	Stack_Row_Pixel	189	,	188
-	Stack_Row_Pixel	190	,	189
-	Stack_Row_Pixel	191	,	190
-	Stack_Row_Pixel	192	,	191
+
+
 
 ; ; pre-pop buffer
 ; 	Stack_Row_Pixel	0	,	192				; 233 T (18 col)
@@ -127,14 +102,6 @@ SP_MAIN:
 ; 		LD 			SP, SCREEN_END_0								; 10 T
 
 
-
-; filler
-	LD 		B, 21
-FILLER:
-	DJNZ	FILLER
-
-	; fiddling
-	.4 NOP								; 4 T
 
 
 	JP		TOP_BORDER_RENDER		
@@ -189,8 +156,12 @@ FILLER:
 
  
 INTERRUPT:              
-	EI                               ; Enable interrupts
-	RET                              ; INTERRUPT
+	EI                              ; Enable interrupts
+	RET                             ; INTERRUPT
+
+; private stack - top borded does 3 16 bit registers... 16 is plenty!
+	DEFS		16					
+PRIVATE_STACK:						; stacks are upside down rmember... label after memory alloc
 
 ; screen
 	ORG			$4000
